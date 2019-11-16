@@ -21,7 +21,7 @@ slug=$(bosh interpolate ${versionfile} --path /pivnet-product-slug)
 
 tmpdir=environments/${iaas}/tile-configs/${product}-config
 mkdir -p ${tmpdir}
-om config-template --output-directory=${tmpdir} --pivnet-api-token ${PIVNET_TOKEN} --pivnet-product-slug  ${slug} --product-version ${version} --product-file-glob ${glob}
+om config-template --output-directory=${tmpdir} --pivnet-api-token ${PIVNET_TOKEN} --pivnet-product-slug  ${slug} --product-version ${version} --pivnet-file-glob ${glob}
 scrubbedversion=$(cut -d'-' -f1 <<< ${version})
 wrkdir=$(find ${tmpdir}/${product} -name "${scrubbedversion}*")
 if [ ! -f ${wrkdir}/product.yml ]; then
@@ -41,8 +41,8 @@ bosh int ${wrkdir}/product.yml ${ops_files_args[@]} > environments/${iaas}/${INI
 
 rm -rf environments/${iaas}/${INITIAL_FOUNDATION}/config/${product}/${product}-defaults.yml
 touch environments/${iaas}/${INITIAL_FOUNDATION}/config/${product}/${product}-defaults.yml
-if [ -f ${wrkdir}/product-default-vars.yml ]; then
-  cat ${wrkdir}/product-default-vars.yml >> environments/${iaas}/${INITIAL_FOUNDATION}/config/${product}/${product}-defaults.yml
+if [ -f ${wrkdir}/default-vars.yml ]; then
+  cat ${wrkdir}/default-vars.yml >> environments/${iaas}/${INITIAL_FOUNDATION}/config/${product}/${product}-defaults.yml
 fi
 if [ -f ${wrkdir}/errand-vars.yml ]; then
   cat ${wrkdir}/errand-vars.yml >> environments/${iaas}/${INITIAL_FOUNDATION}/config/${product}/${product}-defaults.yml
