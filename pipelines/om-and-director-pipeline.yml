@@ -1,6 +1,6 @@
 groups:
 - name: deployment-pipeline
-  jobs: 
+  jobs:
     - lock-director
     - validate-director-configuration
     - install-opsman
@@ -8,9 +8,9 @@ groups:
     - upgrade-opsman
     - unlock-director
 - name: ad-hoc-jobs
-  jobs: 
+  jobs:
     - force-unlock
-    
+
 resource_types:
 - name: pivnet
   type: docker-image
@@ -79,7 +79,7 @@ jobs:
     - put: lock
       params: {acquire: true}
     - get: director-configuration
-      
+
 - name: validate-director-configuration
   plan:
   - aggregate:
@@ -90,7 +90,7 @@ jobs:
       resource: platform-automation
       params:
         unpack: true
-        globs: ["*image*"]    
+        globs: ["*image*"]
     - get: platform-automation-tasks
       resource: platform-automation
       params:
@@ -135,7 +135,7 @@ jobs:
       files: director-configuration
     output_mapping:
       interpolated-files: interpolated-files
-  
+
   - task: download-create-opsman
     image: platform-automation-image
     file: director-configuration/proposed-tasks/download-create-opsman.yml
@@ -150,10 +150,10 @@ jobs:
       STATE_FILE: environments/((iaas))/((foundation))/state/state.yml
       OPSMAN_CONFIG_FILE: environments/((iaas))/((foundation))/config-director/templates/opsman.yml
       VARS_FILES: |
+        vars/environments/((iaas))/((foundation))/config-director/vars/infra.yml
         vars/environments/((iaas))/((foundation))/config-director/vars/opsman.yml
-        vars/environments/((iaas))/((foundation))/config-director/vars/director.yml
-        secrets/environments/((iaas))/((foundation))/config-director/secrets/director.yml
         secrets/environments/((iaas))/((foundation))/config-director/secrets/opsman.yml
+        secrets/environments/((iaas))/((foundation))/config-director/secrets/director.yml
         secrets/environments/((iaas))/((foundation))/config-common/secrets/pivnet.yml
 
     ensure: &make-state-commit
@@ -176,7 +176,7 @@ jobs:
           params:
             repository: state-commit
             merge: true
-  
+
   - task: configure-authentication
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-authentication.yml
@@ -201,7 +201,10 @@ jobs:
       ENV_FILE: environments/((iaas))/((foundation))/config-common/secrets/env.yml
       DIRECTOR_CONFIG_FILE: environments/((iaas))/((foundation))/config-director/templates/director.yml
       VARS_FILES: |
+        vars/environments/((iaas))/((foundation))/config-director/vars/infra.yml
+        vars/environments/((iaas))/((foundation))/config-director/vars/opsman.yml
         vars/environments/((iaas))/((foundation))/config-director/vars/director.yml
+        secrets/environments/((iaas))/((foundation))/config-director/secrets/opsman.yml
         secrets/environments/((iaas))/((foundation))/config-director/secrets/director.yml
 
   - task: apply-director-changes
@@ -233,7 +236,7 @@ jobs:
     file: platform-automation-tasks/tasks/credhub-interpolate.yml
     params: *director_credhub_interpolate_params
     input_mapping:
-      files: director-configuration      
+      files: director-configuration
   - task: export-installation
     image: platform-automation-image
     file: platform-automation-tasks/tasks/export-installation.yml
@@ -256,7 +259,7 @@ jobs:
       resource: platform-automation
       params:
         unpack: true
-        globs: ["*image*"]    
+        globs: ["*image*"]
     - get: platform-automation-tasks
       resource: platform-automation
       params:
@@ -288,6 +291,7 @@ jobs:
       STATE_FILE: environments/((iaas))/((foundation))/state/state.yml
       OPSMAN_CONFIG_FILE: environments/((iaas))/((foundation))/config-director/templates/opsman.yml
       VARS_FILES: |
+        vars/environments/((iaas))/((foundation))/config-director/vars/infra.yml
         vars/environments/((iaas))/((foundation))/config-director/vars/opsman.yml
         vars/environments/((iaas))/((foundation))/config-director/vars/director.yml
         secrets/environments/((iaas))/((foundation))/config-director/secrets/director.yml
