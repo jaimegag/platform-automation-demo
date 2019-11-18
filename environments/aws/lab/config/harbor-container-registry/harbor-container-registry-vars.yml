@@ -1,4 +1,5 @@
 hostname: harbor.pcf-aws.jagapps.co
 network_name: pks
 singleton_availability_zone: us-east-1d
-harbor-app_elb_names: [pcf-aws-harbor]
+harbor-app_elb_names: [alb:pcf-aws-harbor-tg-443,alb:pcf-aws-harbor-tg-4443]
+harbor-app_additional_vm_extensions: [harbor-app-lb-security-groups]
