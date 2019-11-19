@@ -15,8 +15,8 @@ fly -t ci unpause-pipeline -p deploy-om-and-director
 # fly -t ci unpause-pipeline -p deploy-cf
 
 ## Harbor
-# fly -t ci set-pipeline -p deploy-harbor -c pipelines/standard-product-pipeline.yml -l environments/${iaas}/${environment}/common-pipeline-params.yml -v product=harbor-container-registry -n
-# fly -t ci unpause-pipeline -p deploy-harbor
+fly -t ci set-pipeline -p deploy-harbor -c pipelines/standard-product-pipeline.yml -l environments/${iaas}/${environment}/common-pipeline-params.yml -v product=harbor-container-registry -n
+fly -t ci unpause-pipeline -p deploy-harbor
 
 ## PKS
 fly -t ci set-pipeline -p deploy-pks -c pipelines/standard-product-pipeline.yml -l environments/${iaas}/${environment}/common-pipeline-params.yml -v product=pivotal-container-service -n

@@ -41,6 +41,7 @@ product-properties:
     value: ((with_notary))
 resource-config:
   harbor-app:
+    additional_vm_extensions: ((harbor-app_additional_vm_extensions))
     elb_names: ((harbor-app_elb_names))
     instance_type:
       id: ((harbor-app_instance_type))
